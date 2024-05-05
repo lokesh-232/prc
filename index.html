@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display and Copy Paragraph</title>
+    <style>
+        #copyButton {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <p id="paragraph">def binary_search(arr, target):
+        left, right = 0, len(arr) - 1
+        
+        while left <= right:
+            mid = (left + right) // 2
+            if arr[mid] == target:
+                return mid
+            elif arr[mid] < target:
+                left = mid + 1
+            else:
+                right = mid - 1
+        
+        return -1
+    
+    # Example usage:
+    arr = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
+    target = 11
+    result = binary_search(arr, target)
+    if result != -1:
+        print("Element found at index:", result)
+    else:
+        print("Element not found in the array.")
+    </p>
+    <button id="copyButton" onclick="copyParagraph()">Copy Paragraph</button>
+
+    <script>
+        function copyParagraph() {
+            var paragraph = document.getElementById("paragraph");
+            var paragraphText = paragraph.innerText;
+
+            // Create a textarea element to hold the content temporarily
+            var textArea = document.createElement("textarea");
+            textArea.value = paragraphText;
+            document.body.appendChild(textArea);
+
+            // Select the text inside the textarea
+            textArea.select();
+            textArea.setSelectionRange(0, 99999); /* For mobile devices */
+
+            // Copy the text to the clipboard
+            document.execCommand("copy");
+
+            // Remove the textarea element
+            document.body.removeChild(textArea);
+
+            // Alert that content has been copied
+            alert("Text copied to clipboard:\n" + paragraphText);
+        }
+    </script>
+</body>
+</html>

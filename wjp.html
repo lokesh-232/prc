@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display and Copy Paragraph</title>
+    <style>
+        #copyButton {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <pre id="paragraph">from collections import deque
+
+        class WaterJugProblem:
+            def __init__(self, jug1_capacity, jug2_capacity, target):
+                self.jug1_capacity = jug1_capacity
+                self.jug2_capacity = jug2_capacity
+                self.target = target
+                self.visited = set()
+                self.moves = []
+        
+            def is_valid_state(self, jug1, jug2):
+                return 0 <= jug1 <= self.jug1_capacity and 0 <= jug2 <= self.jug2_capacity
+        
+            def solve(self):
+                queue = deque([(0, 0)])
+                self.visited.add((0, 0))
+        
+                while queue:
+                    jug1, jug2 = queue.popleft()
+        
+                    if jug1 == self.target or jug2 == self.target:
+                        return self.moves
+        
+                    # Fill jug1
+                    if self.is_valid_state(self.jug1_capacity, jug2) and (self.jug1_capacity, jug2) not in self.visited:
+                        queue.append((self.jug1_capacity, jug2))
+                        self.visited.add((self.jug1_capacity, jug2))
+                        self.moves.append((self.jug1_capacity, jug2, "Fill jug1"))
+        
+                    # Fill jug2
+                    if self.is_valid_state(jug1, self.jug2_capacity) and (jug1, self.jug2_capacity) not in self.visited:
+                        queue.append((jug1, self.jug2_capacity))
+                        self.visited.add((jug1, self.jug2_capacity))
+                        self.moves.append((jug1, self.jug2_capacity, "Fill jug2"))
+        
+                    # Empty jug1
+                    if self.is_valid_state(0, jug2) and (0, jug2) not in self.visited:
+                        queue.append((0, jug2))
+                        self.visited.add((0, jug2))
+                        self.moves.append((0, jug2, "Empty jug1"))
+        
+                    # Empty jug2
+                    if self.is_valid_state(jug1, 0) and (jug1, 0) not in self.visited:
+                        queue.append((jug1, 0))
+                        self.visited.add((jug1, 0))
+                        self.moves.append((jug1, 0, "Empty jug2"))
+        
+                    # Pour from jug1 to jug2
+                    pour_amount = min(jug1, self.jug2_capacity - jug2)
+                    if self.is_valid_state(jug1 - pour_amount, jug2 + pour_amount) and (jug1 - pour_amount, jug2 + pour_amount) not in self.visited:
+                        queue.append((jug1 - pour_amount, jug2 + pour_amount))
+                        self.visited.add((jug1 - pour_amount, jug2 + pour_amount))
+                        self.moves.append((jug1 - pour_amount, jug2 + pour_amount, "Pour from jug1 to jug2"))
+        
+                    # Pour from jug2 to jug1
+                    pour_amount = min(self.jug1_capacity - jug1, jug2)
+                    if self.is_valid_state(jug1 + pour_amount, jug2 - pour_amount) and (jug1 + pour_amount, jug2 - pour_amount) not in self.visited:
+                        queue.append((jug1 + pour_amount, jug2 - pour_amount))
+                        self.visited.add((jug1 + pour_amount, jug2 - pour_amount))
+                        self.moves.append((jug1 + pour_amount, jug2 - pour_amount, "Pour from jug2 to jug1"))
+        
+                return "No solution found."
+        
+        # Example usage:
+        jug_problem = WaterJugProblem(4, 3, 2)
+        solution = jug_problem.solve()
+        for move in solution:
+            print(move)
+        
+    </pre>
+    <button id="copyButton" onclick="copyParagraph()">Copy Paragraph</button>
+
+    <script>
+        function copyParagraph() {
+            var paragraph = document.getElementById("paragraph");
+            var paragraphText = paragraph.innerText;
+
+            // Create a textarea element to hold the content temporarily
+            var textArea = document.createElement("textarea");
+            textArea.value = paragraphText;
+            document.body.appendChild(textArea);
+
+            // Select the text inside the textarea
+            textArea.select();
+            textArea.setSelectionRange(0, 99999); /* For mobile devices */
+
+            // Copy the text to the clipboard
+            document.execCommand("copy");
+
+            // Remove the textarea element
+            document.body.removeChild(textArea);
+
+            // Alert that content has been copied
+            alert("Text copied to clipboard:\n" + paragraphText);
+        }
+    </script>
+</body>
+</html>

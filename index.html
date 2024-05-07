@@ -3,118 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Python Code Editor</title>
+    <title>Display and Copy Paragraph</title>
     <style>
-        .container {
-    display: flex;
-}
-
-.input, .output {
-    flex: 1;
-    padding: 20px;
-}
-
-textarea {
-    width: 100%;
-    height: 200px;
-    margin-bottom: 10px;
-}
-
-button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-li {
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    padding: 10px;
-    background-color: #f9f9f9;
-}
-
+        #copyButton {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="input">
-            <input type="text" id="programName" placeholder="Enter program name">
-            <textarea id="codeInput" placeholder="Write your Python code here..."></textarea>
-            <button onclick="submitCode()">Submit</button>
-        </div>
-        <div class="output">
-            <h2>Submitted Codes:</h2>
-            <ul id="submittedCodes"></ul>
-        </div>
-    </div>
-    <script >
-        // Function to submit code
-function submitCode() {
-    var programName = document.getElementById('programName').value.trim();
-    var code = document.getElementById('codeInput').value.trim();
-    if (programName !== '' && code !== '') {
-        // Save code to local storage
-        var submittedCodes = localStorage.getItem('submittedCodes');
-        submittedCodes = submittedCodes ? JSON.parse(submittedCodes) : [];
-        submittedCodes.push({name: programName, code: code});
-        localStorage.setItem('submittedCodes', JSON.stringify(submittedCodes));
-        // Display submitted codes
-        displaySubmittedCodes(submittedCodes);
-        // Clear input fields
-        document.getElementById('programName').value = '';
-        document.getElementById('codeInput').value = '';
-    } else {
-        alert('Please enter program name and write some Python code before submitting.');
-    }
-}
+    <p id="paragraph">def binary_search(arr, target):
+        left, right = 0, len(arr) - 1
+        
+        while left <= right:
+            mid = (left + right) // 2
+            if arr[mid] == target:
+                return mid
+            elif arr[mid] < target:
+                left = mid + 1
+            else:
+                right = mid - 1
+        
+        return -1
+    
+    # Example usage:
+    arr = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
+    target = 11
+    result = binary_search(arr, target)
+    if result != -1:
+        print("Element found at index:", result)
+    else:
+        print("Element not found in the array.")
+    </p>
+    <button id="copyButton" onclick="copyParagraph()">Copy Paragraph</button>
 
-// Function to display submitted codes
-function displaySubmittedCodes(submittedCodes) {
-    var ul = document.getElementById('submittedCodes');
-    ul.innerHTML = '';
-    submittedCodes.forEach(function(program) {
-        var li = document.createElement('li');
-        var copyButton = document.createElement('button');
-        copyButton.textContent = 'Copy';
-        copyButton.setAttribute('id', program.name);
-        copyButton.addEventListener('click', function() {
-            copyCode(program.code);
-        });
-        li.textContent = program.name + ': ' + program.code;
-        li.appendChild(copyButton);
-        ul.appendChild(li);
-    });
-}
+    <script>
+        function copyParagraph() {
+            var paragraph = document.getElementById("paragraph");
+            var paragraphText = paragraph.innerText;
 
-// Function to copy code to clipboard
-function copyCode(code) {
-    navigator.clipboard.writeText(code)
-        .then(function() {
-            alert('Code copied to clipboard!');
-        })
-        .catch(function(error) {
-            console.error('Failed to copy code: ', error);
-        });
-}
+            // Create a textarea element to hold the content temporarily
+            var textArea = document.createElement("textarea");
+            textArea.value = paragraphText;
+            document.body.appendChild(textArea);
 
-// Display submitted codes on page load
-window.onload = function() {
-    var submittedCodes = localStorage.getItem('submittedCodes');
-    submittedCodes = submittedCodes ? JSON.parse(submittedCodes) : [];
-    displaySubmittedCodes(submittedCodes);
-};
+            // Select the text inside the textarea
+            textArea.select();
+            textArea.setSelectionRange(0, 99999); /* For mobile devices */
 
+            // Copy the text to the clipboard
+            document.execCommand("copy");
+
+            // Remove the textarea element
+            document.body.removeChild(textArea);
+
+            // Alert that content has been copied
+            alert("Text copied to clipboard:\n" + paragraphText);
+        }
     </script>
 </body>
 </html>

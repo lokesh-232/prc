@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display and Copy Paragraph</title>
+    <style>
+        #copyButton {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <pre id="paragraph">G = [
+    [0, 1, 1, 0, 1, 0],
+    [1, 0, 1, 1, 0, 1],
+    [1, 1, 0, 1, 1, 0],
+    [0, 1, 1, 0, 0, 1],
+    [1, 0, 1, 0, 0, 1],
+    [0, 1, 0, 1, 1, 0]
+]
+
+node = "abcdef"
+
+t_ = {}
+for i in range(len(G)):
+    t_[node[i]] = i
+
+degree = []
+for i in range(len(G)):
+    degree.append(sum(G[i]))
+
+colorDict = {}
+for i in range(len(G)):
+    colorDict[node[i]] = ["Blue", "Red", "Yellow", "Green"]
+
+sorted_node = []
+indeks = []
+
+for i in range(len(degree)):
+    max = 0
+    j = 0
+    for j in range(len(degree)):
+        if j not in indeks:
+            if degree[j] > max:
+                max = degree[j]
+                idx = j
+    indeks.append(idx)
+    sorted_node.append(node[idx])
+
+theSolution = {}
+
+for n in sorted_node:
+    setTheColor = colorDict[n]
+    theSolution[n] = setTheColor[0]
+    adjacentNode = G[t_[n]]
+    for j in range(len(adjacentNode)):
+        if adjacentNode[j] == 1 and (setTheColor[0] in colorDict[node[j]]):
+            colorDict[node[j]].remove(setTheColor[0])
+
+print(theSolution)
+for t, w in sorted(theSolution.items()):
+    print("Node", t, " = ", w)
+
+
+    </pre>
+    <button id="copyButton" onclick="copyParagraph()">Copy Paragraph</button>
+
+    <script>
+        function copyParagraph() {
+            var paragraph = document.getElementById("paragraph");
+            var paragraphText = paragraph.innerText;
+
+            // Create a textarea element to hold the content temporarily
+            var textArea = document.createElement("textarea");
+            textArea.value = paragraphText;
+            document.body.appendChild(textArea);
+
+            // Select the text inside the textarea
+            textArea.select();
+            textArea.setSelectionRange(0, 99999); /* For mobile devices */
+
+            // Copy the text to the clipboard
+            document.execCommand("copy");
+
+            // Remove the textarea element
+            document.body.removeChild(textArea);
+
+            // Alert that content has been copied
+            alert("Text copied to clipboard:\n" + paragraphText);
+        }
+    </script>
+</body>
+</html>
